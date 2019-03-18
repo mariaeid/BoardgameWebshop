@@ -3,48 +3,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Dapper;
+using System.Data.SqlClient;
 using Microsoft.AspNetCore.Http;
 using BoardgameShop.Models;
 using BoardgameShop.Services;
 using BoardgameShop.Repository;
-using Microsoft.Extensions.Configuration;
 
 namespace BoardgameShop.Controllers
 {
     [Route("api/[controller]")]
-    public class PlacedOrderController : Controller
+    public class CartController : Controller
     {
-        private readonly PlacedOrderService placedOrderService;
         private readonly CartService cartService;
 
-        public PlacedOrderController(IConfiguration configuration)
+        public CartController(IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("ConnectionString");
-            this.placedOrderService = new PlacedOrderService(new PlacedOrderRepository(connectionString));
+            this.cartService = new CartService(new CartRepository(connectionString));
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<PlacedOrder>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<Cart>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Get()
         {
-            var placedOrders = this.placedOrderService.Get();
-            if (placedOrders == null)
+            var cart = this.cartService.Get();
+            if (cart == null)
             {
                 return NotFound();
             }
             else
             {
-                return Ok(placedOrders);
+                return Ok(cart);
             }
         }
 
-        [HttpGet("{orderId}")]
-        [ProducesResponseType(typeof(List<PlacedOrder>), StatusCodes.Status200OK)]
+        [HttpGet("{cartId}")]
+        [ProducesResponseType(typeof(List<Cart>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Get(int orderId)
+        public IActionResult Get(string cartId)
         {
-            var id = this.placedOrderService.Get(orderId);
+            var id = this.cartService.Get(cartId);
 
             return Ok(id);
         }
@@ -52,16 +53,23 @@ namespace BoardgameShop.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Post([FromBody]PlacedOrder placedOrder)
+        public IActionResult Post([FromBody]Cart cart)
         {
-            var newOrder = this.placedOrderService.Add(placedOrder);
+            var newCart = this.cartService.Add(cart);
 
-            if (!newOrder)
+            if (newCart == "false")
             {
                 return BadRequest();
             }
-
-            return Ok();
+            else if (newCart == "true")
+            {
+                return Ok();
+            }
+            else
+            {
+                return Ok(newCart);
+            }
+            
         }
     }
 }

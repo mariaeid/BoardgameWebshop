@@ -9,25 +9,25 @@ namespace BoardgameShop.Services
 {
     public class PlacedOrderService
     {
-        private readonly PlacedOrderRepository orderRepository;
+        private readonly PlacedOrderRepository placedOrderRepository;
 
-        public PlacedOrderService(PlacedOrderRepository orderRepository)
+        public PlacedOrderService(PlacedOrderRepository placedOrderRepository)
         {
-            this.orderRepository = orderRepository;
+            this.placedOrderRepository = placedOrderRepository;
         }
 
         public List<PlacedOrder> Get()
         {
-            return this.orderRepository.Get();
+            return this.placedOrderRepository.Get();
         }
-
+         
         public PlacedOrder Get(int id)
         {
             if (id < 1)
             {
                 return null;
             }
-            return this.orderRepository.Get(id);
+            return this.placedOrderRepository.Get(id);
         }
 
         public bool Add(PlacedOrder order)
@@ -38,7 +38,7 @@ namespace BoardgameShop.Services
             }
             else
             {
-                this.orderRepository.Add(order);
+                this.placedOrderRepository.Add(order);
                 return true;
             }
         }
