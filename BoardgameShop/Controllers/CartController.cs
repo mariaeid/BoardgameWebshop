@@ -43,7 +43,7 @@ namespace BoardgameShop.Controllers
         [HttpGet("{cartId}")]
         [ProducesResponseType(typeof(List<Cart>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Get(string cartId)
+        public IActionResult Get(int cartId)
         {
             var id = this.cartService.Get(cartId);
 
@@ -57,11 +57,11 @@ namespace BoardgameShop.Controllers
         {
             var newCart = this.cartService.Add(cart);
 
-            if (newCart == "false")
+            if (newCart == 0)
             {
                 return BadRequest();
             }
-            else if (newCart == "true")
+            else if (newCart == 1)
             {
                 return Ok();
             }
@@ -71,5 +71,6 @@ namespace BoardgameShop.Controllers
             }
             
         }
+        
     }
 }

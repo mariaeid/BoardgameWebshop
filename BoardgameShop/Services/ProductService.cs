@@ -33,7 +33,7 @@ namespace BoardgameShop.Services
 
         public bool Add(Product product)
         {
-            if (string.IsNullOrEmpty(product.Name) || product.Price < 0 || product.Quantity < 0)
+            if (string.IsNullOrEmpty(product.Name) || product.Price < 0)
             {
                 return false;
             }

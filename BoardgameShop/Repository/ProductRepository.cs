@@ -41,7 +41,7 @@ namespace BoardgameShop.Repository
         {
             using (var connection = new SqlConnection(this.connectionString))
             {
-                connection.Execute("INSERT INTO Product (Name, Price, Quantity, Description, Image, Category) VALUES(@name, @price, @quantity, @description, @image, @category)", product);
+                connection.Execute("INSERT INTO Product (Name, Price, Description, Image, Category) VALUES(@name, @price, @description, @image, @category)", product);
             }
         }
     }

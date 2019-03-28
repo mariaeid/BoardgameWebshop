@@ -22,22 +22,22 @@ namespace BoardgameShop.Services
             return this.cartRepository.Get();
         }
 
-        public Cart Get(string cartId)
+        public List<Cart>  Get(int cartId)
         {
-            if (string.IsNullOrEmpty(cartId))
+            if (cartId  == 0)
             {
                 return null;
             }
             return this.cartRepository.Get(cartId);
         }
 
-        public string Add(Cart cart)
+        public int Add(Cart cart)
         {
             if (cart.ProductId == 0)
             {
-                return "false";
+                return 0;
             }
-            else if (string.IsNullOrEmpty(cart.CartId))
+            else if (cart.CartId == 0)
             {
                 cart.CartId = this.GetRandomCartId();  
                 this.cartRepository.Add(cart);
@@ -46,21 +46,22 @@ namespace BoardgameShop.Services
             else
             {
                 this.cartRepository.Add(cart);
-                return "true";
+                return 1;
             }
         }
 
-        public string GetRandomCartId()
+        public int GetRandomCartId()
         {
             // Generate a random string with a given size
             var returnString = "";
             Random noGen = new Random();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 6; i++)
             {
-                int tmpNo = noGen.Next(1,9);
+                int tmpNo = noGen.Next(1, 9);
                 returnString += tmpNo.ToString();
             }
-            return returnString;
+            int randNo = Convert.ToInt32(returnString);
+            return randNo;
         }
     }
 }

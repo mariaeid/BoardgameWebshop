@@ -15,12 +15,11 @@ namespace BoardgameShop.Controllers
     public class PlacedOrderController : Controller
     {
         private readonly PlacedOrderService placedOrderService;
-        private readonly CartService cartService;
 
         public PlacedOrderController(IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("ConnectionString");
-            this.placedOrderService = new PlacedOrderService(new PlacedOrderRepository(connectionString));
+            this.placedOrderService = new PlacedOrderService(new PlacedOrderRepository(connectionString), new PlacedOrderRowsRepository(connectionString));
         }
 
         [HttpGet]
@@ -49,12 +48,12 @@ namespace BoardgameShop.Controllers
             return Ok(id);
         }
 
-        [HttpPost]
+        [HttpPost("{orderId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Post([FromBody]PlacedOrder placedOrder)
+        public IActionResult Post(int orderId, [FromBody]PlacedOrder placedOrder)
         {
-            var newOrder = this.placedOrderService.Add(placedOrder);
+            var newOrder = this.placedOrderService.createOrder(orderId, placedOrder);
 
             if (!newOrder)
             {

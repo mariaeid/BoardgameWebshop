@@ -27,23 +27,13 @@ namespace BoardgameShop.Repository
             }
         }
 
-        public Cart Get(string cartId)
+        public List<Cart> Get(int cartId)
         {
             using (var connection = new SqlConnection(this.connectionString))
             {
-                var cartItem = connection.QuerySingleOrDefault<Cart>("SELECT * FROM Cart WHERE CartId = @cartId", new { cartId });
+                var cartItem = connection.Query<Cart>("SELECT * FROM Cart WHERE CartId = @cartId", new { cartId }).ToList();
 
                 return cartItem;
-            }
-        }
-
-        public List<Cart> GetLastItem()
-        {
-            using (var connection = new SqlConnection(this.connectionString))
-            {
-                var latestCartItem = connection.Query<Cart>("SELECT * FROM Cart ORDER BY ID DESC LIMIT 1").ToList();
-
-                return latestCartItem;
             }
         }
 
@@ -52,6 +42,14 @@ namespace BoardgameShop.Repository
             using (var connection = new SqlConnection(this.connectionString))
             {
                 connection.Execute("INSERT INTO Cart (CartId, ProductId) VALUES(@cartId, @productId)", cart);
+            }
+        }
+
+        public void Delete(int cartId)
+        {
+            using (var connection = new SqlConnection(this.connectionString))
+            {
+                connection.Execute("DELETE FROM Cart Where CartId = @cartId", new { cartId });
             }
         }
     }

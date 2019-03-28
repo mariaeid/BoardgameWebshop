@@ -10,10 +10,12 @@ namespace BoardgameShop.Services
     public class PlacedOrderService
     {
         private readonly PlacedOrderRepository placedOrderRepository;
+        private readonly PlacedOrderRowsRepository placedOrderRowsRepository;
 
-        public PlacedOrderService(PlacedOrderRepository placedOrderRepository)
+        public PlacedOrderService(PlacedOrderRepository placedOrderRepository, PlacedOrderRowsRepository placedOrderRowsRepository)
         {
             this.placedOrderRepository = placedOrderRepository;
+            this.placedOrderRowsRepository = placedOrderRowsRepository;
         }
 
         public List<PlacedOrder> Get()
@@ -21,26 +23,60 @@ namespace BoardgameShop.Services
             return this.placedOrderRepository.Get();
         }
          
-        public PlacedOrder Get(int id)
+        public PlacedOrder Get(int cartId)
         {
-            if (id < 1)
+            if (cartId == 0)
             {
                 return null;
             }
-            return this.placedOrderRepository.Get(id);
+            return this.placedOrderRepository.Get(cartId);
         }
 
-        public bool Add(PlacedOrder order)
+        public bool createOrder(int orderId, PlacedOrder placedOrder)
         {
-            if (string.IsNullOrEmpty(order.Name) || string.IsNullOrEmpty(order.Email) || string.IsNullOrEmpty(order.Address) || string.IsNullOrEmpty(order.ZipCode) || string.IsNullOrEmpty(order.City))
+            if (orderId == 0)
             {
                 return false;
             }
+
             else
             {
-                this.placedOrderRepository.Add(order);
-                return true;
+                placedOrder.OrderId = orderId;
+                placedOrder.OrderDate = GetTimestamp(DateTime.Now);
+                List<PlacedOrderRows> allPlacedOrderRows = this.placedOrderRowsRepository.Get(orderId);
+                float sumAllPrices = 0;
+                foreach (var placedOrderRow in allPlacedOrderRows)
+                {
+                    sumAllPrices += placedOrderRow.Price;
+                }
+
+                placedOrder.TotalPrice = sumAllPrices;    
+
+                this.placedOrderRepository.Add(placedOrder);
             }
+            return true;
+           
         }
+
+        public static String GetTimestamp(DateTime value)
+        {
+            return value.ToString("yyyyMMddHHmmss");
+        }
+
+
+        //public bool Add(PlacedOrder order)
+        //{
+        //    if (string.IsNullOrEmpty(order.Name) || string.IsNullOrEmpty(order.Email) || string.IsNullOrEmpty(order.Address) || string.IsNullOrEmpty(order.ZipCode) || string.IsNullOrEmpty(order.City))
+        //    {
+        //        return false;
+        //    }
+        //    else
+        //    {
+        //        this.placedOrderRepository.Add(order);
+        //        return true;
+        //    }
+        //}
+
     }
+
 }

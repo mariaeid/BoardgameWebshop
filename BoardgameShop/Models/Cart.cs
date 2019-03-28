@@ -7,7 +7,7 @@ namespace BoardgameShop.Models
 {
     public class Cart
     {
-        public string CartId { get; set; }
+        public int CartId { get; set; }
         public int ProductId { get; set; }
     }
 }

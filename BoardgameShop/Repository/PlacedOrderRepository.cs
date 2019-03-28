@@ -21,9 +21,9 @@ namespace BoardgameShop.Repository
         {
             using (var connection = new SqlConnection(this.connectionString))
             {
-                var placedOrder = connection.Query<PlacedOrder>("SELECT * FROM PlacedOrder").ToList();
+                var placedOrders = connection.Query<PlacedOrder>("SELECT * FROM PlacedOrder").ToList();
 
-                return placedOrder;
+                return placedOrders;
             }
         }
 
@@ -31,9 +31,9 @@ namespace BoardgameShop.Repository
         {
             using (var connection = new SqlConnection(this.connectionString))
             {
-                var placedOrderItem = connection.QuerySingleOrDefault<PlacedOrder>("SELECT * FROM PlacedOrder WHERE OrderId = @orderId", new { orderId });
+                var placedOrder = connection.QuerySingleOrDefault<PlacedOrder>("SELECT * FROM PlacedOrder WHERE OrderId = @orderId", new { orderId });
 
-                return placedOrderItem;
+                return placedOrder;
             }
         }
 
@@ -41,7 +41,7 @@ namespace BoardgameShop.Repository
         {
             using (var connection = new SqlConnection(this.connectionString))
             {
-                connection.Execute("INSERT INTO PlacedOrder (Name, Email, Address, ZipCode, City, CartId) VALUES(@name, @email, @address, @zipcode, @city, @cartid)", placedOrder);
+                connection.Execute("INSERT INTO PlacedOrder (OrderId, Name, Email, Address, ZipCode, City, TotalPrice, OrderDate) VALUES(@orderId, @name, @email, @address, @zipcode, @city, @totalPrice, @orderDate)", placedOrder);
             }
         }
     }

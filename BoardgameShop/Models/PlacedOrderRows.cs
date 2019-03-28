@@ -5,13 +5,11 @@ using System.Threading.Tasks;
 
 namespace BoardgameShop.Models
 {
-    public class Product
+    public class PlacedOrderRows
     {
+        public int OrderId { get; set; }
         public int ProductId { get; set; }
         public string Name { get; set; }
         public float Price { get; set; }
-        public string Description { get; set; }
-        public string Image { get; set; }
-        public string Category { get; set; }
     }
 }

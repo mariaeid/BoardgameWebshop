@@ -13,6 +13,7 @@ namespace BoardgameShop.Models
         public string Address { get; set; }
         public string ZipCode { get; set; }
         public string City { get; set; }
-        public string CartId { get; set; }
+        public float TotalPrice { get; set; }
+        public string OrderDate { get; set; }
     }
 }
