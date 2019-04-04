@@ -41,8 +41,10 @@ namespace BoardgameShop.Services
 
             else
             {
+                //Adding orderId and orderDate
                 placedOrder.OrderId = orderId;
                 placedOrder.OrderDate = GetTimestamp(DateTime.Now);
+                //Getting all order rows with the specified order no and sum their prices to get total price
                 List<PlacedOrderRows> allPlacedOrderRows = this.placedOrderRowsRepository.Get(orderId);
                 float sumAllPrices = 0;
                 foreach (var placedOrderRow in allPlacedOrderRows)
@@ -62,20 +64,6 @@ namespace BoardgameShop.Services
         {
             return value.ToString("yyyyMMddHHmmss");
         }
-
-
-        //public bool Add(PlacedOrder order)
-        //{
-        //    if (string.IsNullOrEmpty(order.Name) || string.IsNullOrEmpty(order.Email) || string.IsNullOrEmpty(order.Address) || string.IsNullOrEmpty(order.ZipCode) || string.IsNullOrEmpty(order.City))
-        //    {
-        //        return false;
-        //    }
-        //    else
-        //    {
-        //        this.placedOrderRepository.Add(order);
-        //        return true;
-        //    }
-        //}
 
     }
 

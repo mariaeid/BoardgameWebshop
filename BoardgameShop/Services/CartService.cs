@@ -31,6 +31,7 @@ namespace BoardgameShop.Services
                 return null;
             }
 
+            //Retreiving product data to get product name, price etc for the cart item
             List<Product> productsFromCartId = new List<Product>();
             List<Cart> cartItems = this.cartRepository.Get(cartId);
 
@@ -51,6 +52,7 @@ namespace BoardgameShop.Services
             {
                 return 0;
             }
+            //If the is no cartId, a random number is generated and returned to the user
             else if (cart.CartId == 0)
             {
                 cart.CartId = this.GetRandomCartId();  

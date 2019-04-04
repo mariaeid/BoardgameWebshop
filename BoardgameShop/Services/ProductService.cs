@@ -24,7 +24,7 @@ namespace BoardgameShop.Services
 
         public Product Get(int productId)
         {
-            if (productId < 1)
+            if (productId == 0)
             {
                 return null;
             }
@@ -33,7 +33,7 @@ namespace BoardgameShop.Services
 
         public bool Add(Product product)
         {
-            if (string.IsNullOrEmpty(product.Name) || product.Price < 0)
+            if (string.IsNullOrEmpty(product.Name) || product.Price == 0)
             {
                 return false;
             }
