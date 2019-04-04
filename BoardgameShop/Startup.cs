@@ -14,6 +14,8 @@ namespace BoardgameShop
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -25,6 +27,18 @@ namespace BoardgameShop
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                });
+            });
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,7 +48,12 @@ namespace BoardgameShop
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            else
+            {
+                app.UseHsts();
+            }
+            app.UseCors(MyAllowSpecificOrigins);
+            app.UseHttpsRedirection();
             app.UseMvc();
         }
     }

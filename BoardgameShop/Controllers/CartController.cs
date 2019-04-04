@@ -17,11 +17,13 @@ namespace BoardgameShop.Controllers
     public class CartController : Controller
     {
         private readonly CartService cartService;
+        private readonly ProductService productService;
 
         public CartController(IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("ConnectionString");
-            this.cartService = new CartService(new CartRepository(connectionString));
+            this.cartService = new CartService(new CartRepository(connectionString), new ProductRepository(connectionString));
+
         }
 
         [HttpGet]
@@ -61,14 +63,8 @@ namespace BoardgameShop.Controllers
             {
                 return BadRequest();
             }
-            else if (newCart == 1)
-            {
-                return Ok();
-            }
-            else
-            {
-                return Ok(newCart);
-            }
+
+            return Ok(newCart);
             
         }
         

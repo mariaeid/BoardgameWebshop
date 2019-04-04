@@ -11,10 +11,12 @@ namespace BoardgameShop.Services
     public class CartService
     {
         private readonly CartRepository cartRepository;
+        private readonly ProductRepository productRepository;
 
-        public CartService(CartRepository cartRepository)
+        public CartService(CartRepository cartRepository, ProductRepository productRepository)
         {
             this.cartRepository = cartRepository;
+            this.productRepository = productRepository;
         }
 
         public List<Cart> Get()
@@ -22,13 +24,25 @@ namespace BoardgameShop.Services
             return this.cartRepository.Get();
         }
 
-        public List<Cart>  Get(int cartId)
+        public List<Product>  Get(int cartId)
         {
             if (cartId  == 0)
             {
                 return null;
             }
-            return this.cartRepository.Get(cartId);
+
+            List<Product> productsFromCartId = new List<Product>();
+            List<Cart> cartItems = this.cartRepository.Get(cartId);
+
+            foreach (var cartItem in cartItems)
+            {
+                var productId = cartItem.ProductId;
+                var productData = this.productRepository.Get(productId);
+
+                productsFromCartId.Add(productData);
+
+            }
+            return productsFromCartId;
         }
 
         public int Add(Cart cart)
@@ -46,7 +60,7 @@ namespace BoardgameShop.Services
             else
             {
                 this.cartRepository.Add(cart);
-                return 1;
+                return cart.CartId;
             }
         }
 
